@@ -9,7 +9,7 @@
     "seed": "ts-node prisma/seed.ts",
     "prisma:generate": "prisma generate",
     "postprisma:generate": "shx cp -r node_modules/.prisma/client/index.d.ts ../client/src/types/prismaTypes.d.ts",
-     "lint": "eslint src/**/*.ts",
+    "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix"
   },
   "keywords": [],

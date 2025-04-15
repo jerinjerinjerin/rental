@@ -10,6 +10,9 @@ import { authMiddleware } from './middleware/authMiddleware';
 
 import tenentRoutes from './routes/tenentRoutes';
 import  managerRoutes from './routes/managerRoutes';
+import propertyRoutes from './routes/propertyRoutes';
+import leaseRoutes from './routes/leaseRoutes';
+import applicationRoutes from './routes/applicationRoutes'
 
 // configurations
 dotenv.config();
@@ -28,8 +31,12 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+
+app.use('/properties', propertyRoutes);
 app.use('/tenants', authMiddleware(['tenant']), tenentRoutes);
 app.use('/managers', authMiddleware(['manager']), managerRoutes);
+app.use('/leases', leaseRoutes);
+app.use('/applications', applicationRoutes)
  
 // server
 
