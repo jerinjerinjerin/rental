@@ -137,7 +137,7 @@ export const addFavoriteProperty = async (req: express.Request, res: express.Res
         },
         include: { favorites: true },
       });
-      res.json(updateTenant);
+      res.json(updatedTenant);
     } else {
       res.status(409).json({ message: 'Property already added as foverites' });
     }
@@ -167,7 +167,7 @@ export const removeFavoriteProperty = async (req: express.Request, res: express.
       include: {favorites: true}
     });
 
-   res.json(updateTenant);
+   res.json(updatedTenant);
 
   } catch (error) {
     if (error instanceof Error) {
