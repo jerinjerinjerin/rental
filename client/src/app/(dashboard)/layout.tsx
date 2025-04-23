@@ -16,25 +16,28 @@ const DashboardLayout:React.FC<Props> = ({children}) => {
 
  const router = useRouter();
 
- const pathName = usePathname()
+ const pathname = usePathname()
 
  const [isLoading, setIsLoading] = React.useState(true);
 
  React.useEffect(() => {
-    if(authUser){
-      const userRole = authUser.userRole?.toLowerCase();
-
-      if(userRole === "manager" && pathName.startsWith("/tenants")
-        || userRole === "tenant" && pathName.startsWith("/managers")){
+  if (authUser) {
+    const userRole = authUser.userRole?.toLowerCase();
+    if (
+      (userRole === "manager" && pathname.startsWith("/tenants")) ||
+      (userRole === "tenant" && pathname.startsWith("/managers")) 
+    ) {
       router.push(
-        userRole === "manager" ? "/managers/properties" : "/tenants/favorites",
-        {scroll: false}
-      )
-      } else {
-        setIsLoading(false);
-      }
+        userRole === "manager"
+          ? "/managers/properties"
+          : "/tenants/favorites",
+        { scroll: false }
+      );
+    } else {
+      setIsLoading(false);
     }
- }, [authUser, pathName, router]);
+  }
+ }, [authUser, pathname, router]);
 
  if(authLoading || isLoading) return <>Loading...</>
 

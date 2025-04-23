@@ -175,23 +175,23 @@ export const createProperty = async (req: express.Request, res: express.Response
 
     const { address, city, state, country, postalCode, managerCognitoId, ...propertyData } = req.body;
 
-    const photoUrls = await Promise.all(
-      files.map(async (file) => {
-        const uploadParams = {
-          Bucket: process.env.S3_BUCKET_NAME!,
-          Key: `properties/${Date.now()}-${file.originalname}`,
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        };
+    // const photoUrls = await Promise.all(
+    //   files.map(async (file) => {
+    //     const uploadParams = {
+    //       Bucket: process.env.S3_BUCKET_NAME!,
+    //       Key: `properties/${Date.now()}-${file.originalname}`,
+    //       Body: file.buffer,
+    //       ContentType: file.mimetype,
+    //     };
 
-        const uploadResult = await new Upload({
-          client: s3Client,
-          params: uploadParams,
-        }).done();
+    //     const uploadResult = await new Upload({
+    //       client: s3Client,
+    //       params: uploadParams,
+    //     }).done();
 
-        return uploadResult.Location;
-      }),
-    );
+    //     return uploadResult.Location;
+    //   }),
+    // );
 
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({
       street: address,
@@ -224,7 +224,7 @@ export const createProperty = async (req: express.Request, res: express.Response
     const newProperty = await prisma.property.create({
       data: {
         ...propertyData,
-        photoUrls,
+        // photoUrls,
         locationId: location.id,
         managerCognitoId,
         amenities: typeof propertyData.amenities === 'string' ? propertyData.amenities.split(',') : [],

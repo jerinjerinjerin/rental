@@ -1,5 +1,5 @@
 import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils";
-import { Manager, Property, Tenant } from "@/types/prismaType";
+import { Lease, Manager, Payment, Property, Tenant } from "@/types/prismaType";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import { FiltersState } from ".";
@@ -18,7 +18,7 @@ export const api = createApi({
     },
   }),
   reducerPath: "api",
-  tagTypes: ["Managers", "Tenants", "Properties","PropertyDetails"],
+  tagTypes: ["Managers", "Tenants", "Properties","PropertyDetails", "Leases", "Payments"],
   endpoints: (build) => ({
     getAuthUser: build.query<User, void>({
       queryFn: async (_, _queryApi, _extraoptions, fetchWithBQ) => {
@@ -106,6 +106,7 @@ export const api = createApi({
               { type: "Properties", id: "LIST" },
             ]
           : [{ type: "Properties", id: "LIST" }],
+
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
           error: "Failed to fetch properties.",
@@ -130,6 +131,19 @@ export const api = createApi({
       query: (cognitoId) => `tenants/${cognitoId}`,
       providesTags: (result) => [{ type: "Tenants", id: result?.id }],
     }),
+
+    getCurrentResidencs: build.query<Property[], string>({
+      query: (cognitoId) => `tenants/${cognitoId}/current-residences`,
+       providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Properties" as const, id })),
+              { type: "Properties", id: "LIST" },
+            ]
+          : [{ type: "Properties", id: "LIST" }],
+    }),
+
+
 
     updateTenatentSettings: build.mutation<
       Tenant,
@@ -170,6 +184,51 @@ export const api = createApi({
         { type: "Properties", id: "LIST" },
       ],
     }),
+
+    //managers relateds endpoints
+
+    getManagersProperites: build.query<Property[], string>({
+      query: (cognitoId) => `managers/${cognitoId}/properties`,
+       providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Properties" as const, id })),
+              { type: "Properties", id: "LIST" },
+            ]
+          : [{ type: "Properties", id: "LIST" }],
+    }),
+
+    createProperty: build.mutation<
+    Property,
+    FormData
+  >({
+    query: (newProperty) => ({
+      url: `properites`,
+      method: "POST",
+      body: newProperty,
+    }),
+    invalidatesTags: (result) => [
+      { type: "Properties", id: "LIST" },
+      { type: "Managers", id: result?.manager?.id },
+    ],
+  }),
+
+    // least related endpoints
+
+    getLeases: build.query<Lease[], number>({
+      query: () => "leases",
+      providesTags: ["Leases"],
+    }),
+
+    getPropertyLeases: build.query<Lease[], number>({
+      query: (propertyId) => `properties/${propertyId}/leases`,
+      providesTags: ["Leases"],
+    }),
+
+    getPayments: build.query<Payment[], number>({
+      query: (leaseID) => `leases/${leaseID}/payments`,
+      providesTags: ["Payments"],
+    }),
   }),
 });
 
@@ -177,9 +236,15 @@ export const {
   useGetAuthUserQuery,
   useUpdateTenatentSettingsMutation,
   useUpdateManagerSettingsMutation,
+  useCreatePropertyMutation,
   useGetPropertyQuery,
   useGetPropertiesQuery,
   useGetTenantQuery,
+  useGetCurrentResidencsQuery,
   useAddFavoritePropertyMutation,
   useRemoveFavoritePropertyMutation,
+  useGetLeasesQuery,
+  useGetPaymentsQuery,
+  useGetPropertyLeasesQuery,
+  useGetManagersProperitesQuery,
 } = api;

@@ -50,6 +50,9 @@ const PropertyLocation :React.FC<PropertyLocationProps>= ({propertyId}) => {
         return <>Property not Found</>;
       }
 
+      console.log("Coordinates:", property.location.coordinates);
+
+
 
   return (
     <div className="py-16">

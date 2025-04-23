@@ -21,7 +21,7 @@ router.get('/:id',  getProperty);
 
 router.post('/',
      authMiddleware(['manager']),
-     upload.array(''), 
+     upload.array('photos'), 
      createProperty,
     );
 

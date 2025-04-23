@@ -1,12 +1,16 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar";
+import Landing from "./(nondashboard)/landing/page";
 
 
 export default function Home() {
   return (
-    <div className="bg-black min-h-screen text-white flex items-center justify-center">
-      <Button variant={'destructive'}>click</Button>
+    <div className="h-full w-full">
+      <Navbar />
+      <main className={`h-full flex w-full flex-col`}>
+        <Landing />
+      </main>
     </div>
   );
 }

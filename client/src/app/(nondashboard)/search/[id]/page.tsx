@@ -29,7 +29,7 @@ const SingleListing = () => {
           <PropertyLocation propertyId={propertyId}/>
        </div>
        <div className="order-1 md:order-2">
-          <ContactWidget isModelOpen={() => setIsOpenModel(true)}/>
+          <ContactWidget onOpenModal={() => setIsOpenModel(true)}/>
        </div>
       </div>
     </div>

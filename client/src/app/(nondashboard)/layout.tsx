@@ -19,7 +19,6 @@ const Layout: React.FC<Props> = ({children}) => {
   
    const pathName = usePathname()
   
-   const [isLoading, setIsLoading] = React.useState(true);
   
    React.useEffect(() => {
       if(authUser){
@@ -31,13 +30,11 @@ const Layout: React.FC<Props> = ({children}) => {
           '/managers/properties',
           {scroll: false}
         )
-        } else {
-          setIsLoading(false);
-        }
+        } 
       }
    }, [authUser, pathName, router]);
   
-   if(authLoading || isLoading) return <>Loading...</>
+   if(authLoading ) return <>Loading...</>
 
   return (
     <div className='h-full w-full'>
