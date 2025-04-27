@@ -8,6 +8,7 @@ import PropertyOverview from "./PropertyOverview";
 import PropertyDetials from "./PropertyDetials";
 import PropertyLocation from "./PropertyLocation";
 import ContactWidget from "./ContactWidget";
+import ApplicationModel from "./ApplicationModel";
 
 const SingleListing = () => {
   const { id } = useParams();
@@ -32,6 +33,16 @@ const SingleListing = () => {
           <ContactWidget onOpenModal={() => setIsOpenModel(true)}/>
        </div>
       </div>
+
+      {
+        authUser && (
+          <ApplicationModel
+            isOpen={isOpenModel}
+            onClose={() => setIsOpenModel(false)}
+            propertyId={propertyId}
+          />
+        )
+      }
     </div>
   );
 };

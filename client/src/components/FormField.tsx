@@ -1,3 +1,5 @@
+
+
 import React from "react";
 import {
   ControllerRenderProps,
@@ -74,8 +76,19 @@ export const CustomFormField: React.FC<FormFieldProps> = ({
   isIcon = false,
   initialValue,
 }) => {
-  const { control } = useFormContext();
+  const methods = useFormContext();
 
+if (!methods) {
+  throw new Error("CustomFormField must be used inside a FormProvider");
+}
+
+
+
+const { control } = methods;
+
+  if (!methods) {
+    throw new Error("CustomFormField must be used inside a FormProvider");
+  }
   const renderFormControl = (
     field: ControllerRenderProps<FieldValues, string>
   ) => {
