@@ -2,8 +2,8 @@
 "use client";
 import React from 'react'
 import { 
-  useGetAuthUserQuery, 
-  useGetManagersProperitesQuery, 
+  useGetAuthUserQuery,
+  useGetManagerPropertiesQuery, 
 } from '@/state/api'
 import Loading from '@/components/Loading';
 import Header from '@/components/Header';
@@ -16,7 +16,7 @@ const Properites = () => {
     data: managerProperites,
     isLoading,
     error
-  } = useGetManagersProperitesQuery(
+  } = useGetManagerPropertiesQuery(
     authUser?.cognitoInfo?.userId || "",
     {
       skip: !authUser?.cognitoInfo?.userId,

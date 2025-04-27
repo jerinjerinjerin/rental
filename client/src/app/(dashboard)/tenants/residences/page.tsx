@@ -3,7 +3,7 @@
 import React from 'react'
 import { 
   useGetAuthUserQuery, 
-  useGetCurrentResidencsQuery, 
+  useGetCurrentResidencesQuery, 
   useGetTenantQuery 
 } from '@/state/api'
 import Loading from '@/components/Loading';
@@ -24,7 +24,7 @@ const Residences = () => {
     data: currentResidences,
     error,
     isLoading,
-  } = useGetCurrentResidencsQuery(
+  } = useGetCurrentResidencesQuery(
     authUser?.cognitoInfo?.userId || "",
     {
       skip: !authUser?.cognitoInfo?.userId,

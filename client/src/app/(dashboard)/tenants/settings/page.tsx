@@ -1,14 +1,14 @@
 "use client"
 
 import SettingsForm from '@/components/SettingsForm';
-import { useGetAuthUserQuery, useUpdateTenatentSettingsMutation } from '@/state/api'
+import { useGetAuthUserQuery, useUpdateTenantSettingsMutation, } from '@/state/api'
 import React from 'react'
 
 const TenantSettings: React.FC = () => {
 
     const {data: authUser, isLoading } = useGetAuthUserQuery();
 
-    const [updateTenant] = useUpdateTenatentSettingsMutation();
+    const [updateTenant] = useUpdateTenantSettingsMutation();
 
     if(isLoading) return <div>Loading...</div>
 

@@ -1,50 +1,53 @@
 "use client";
 import React from "react";
-import {
-  
-  useGetPaymentsQuery,
-  useGetPropertiesQuery,
-  useGetPropertyLeasesQuery,
-} from "@/state/api";
-import Loading from "@/components/Loading";
+
 import Header from "@/components/Header";
-import { useParams } from "next/navigation";
-import Link from "next/link";
+import Loading from "@/components/Loading";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  useGetPaymentsQuery,
+  useGetPropertyLeasesQuery,
+  useGetPropertyQuery,
+} from "@/state/api";
 import { ArrowDownToLine, ArrowLeft, Check, Download } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
-const ProperityTenants = () => {
+const PropertyTenants = () => {
   const { id } = useParams();
-
   const propertyId = Number(id);
 
   const { data: property, isLoading: propertyLoading } =
-    useGetPropertiesQuery(propertyId);
-
+    useGetPropertyQuery(propertyId);
   const { data: leases, isLoading: leasesLoading } =
     useGetPropertyLeasesQuery(propertyId);
-
-  const { data: payments, isLoading: paymentLoading } =
+  const { data: payments, isLoading: paymentsLoading } =
     useGetPaymentsQuery(propertyId);
 
-  if (propertyLoading || leasesLoading || paymentLoading) return <Loading />;
+  if (propertyLoading || leasesLoading || paymentsLoading) return <Loading />;
 
   const getCurrentMonthPaymentStatus = (leaseId: number) => {
     const currentDate = new Date();
-
     const currentMonthPayment = payments?.find(
       (payment) =>
         payment.leaseId === leaseId &&
         new Date(payment.dueDate).getMonth() === currentDate.getMonth() &&
         new Date(payment.dueDate).getFullYear() === currentDate.getFullYear()
     );
-
     return currentMonthPayment?.paymentStatus || "Not Paid";
   };
 
   return (
     <div className="dashboard-container">
+      {/* Back to properties page */}
       <Link
         href="/managers/properties"
         className="flex items-center mb-4 hover:text-primary-500"
@@ -53,11 +56,13 @@ const ProperityTenants = () => {
         <ArrowLeft className="w-4 h-4 mr-2" />
         <span>Back to Properties</span>
       </Link>
+
       <Header
-        title={property?.[0]?.name || "My Property"}
+        title={property?.name || "My Property"}
         subtitle="Manage tenants and leases for this property"
       />
-       <div className="w-full space-y-6">
+
+      <div className="w-full space-y-6">
         <div className="mt-8 bg-white rounded-xl shadow-md overflow-hidden p-6">
           <div className="flex justify-between items-center mb-4">
             <div>
@@ -153,4 +158,4 @@ const ProperityTenants = () => {
   );
 };
 
-export default ProperityTenants;
+export default PropertyTenants;
